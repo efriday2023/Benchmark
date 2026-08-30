@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Benchmark: Where Your Page Actually Stands</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F7F8FA;
+    --paper-2: #EDEFF3;
+    --ink: #0E1116;
+    --ink-soft: #565D6B;
+    --line: #DBDEE5;
+    --navy: #0F1B33;
+    --navy-2: #17284A;
+    --orange: #D9541F;
+    --orange-2: #E8792A;
+    --cyan: #1B7A8C;
+    --green: #2F6B4F;
+    --white: #FFFFFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px),
+      var(--paper);
+    background-size: 42px 42px;
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: 'Archivo', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 56px;
+    border-bottom: 1.5px solid var(--ink);
+    background: rgba(247,248,250,0.85);
+    backdrop-filter: blur(8px);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+
+  .brand {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 19px;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .brand span { color: var(--orange); }
+
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 0 3px rgba(47,107,79,0.15);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .nav-links { display: flex; gap: 30px; align-items: center; }
+
+  .nav-links a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .nav-links a:hover { color: var(--ink); }
+
+  .nav-cta {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+  }
+
+  .nav-cta:hover { background: var(--orange); }
+
+  /* HERO — number-first, asymmetric */
+  .hero {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    padding: 70px 56px 90px;
+    max-width: 1280px;
+    margin: 0 auto;
+    gap: 40px;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    background: rgba(27,122,140,0.08);
+    border: 1px solid rgba(27,122,140,0.3);
+    padding: 6px 12px;
+    margin-bottom: 26px;
+  }
+
+  .hero-tag::before { content: "●"; font-size: 8px; }
+
+  .hero h1 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 54px;
+    line-height: 1.06;
+    letter-spacing: -0.01em;
+  }
+
+  .hero h1 .underline {
+    text-decoration: underline;
+    text-decoration-color: var(--orange);
+    text-decoration-thickness: 6px;
+    text-underline-offset: 4px;
+  }
+
+  .hero-body {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    margin-top: 22px;
+    max-width: 460px;
+  }
+
+  .hero-ctas { display: flex; gap: 14px; margin-top: 34px; }
+
+  .btn-primary {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 15px 26px;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 14.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    transition: background 0.15s ease;
+  }
+
+  .btn-primary:hover { background: var(--orange); }
+
+  .btn-ghost {
+    border: 2px solid var(--ink);
+    color: var(--ink);
+    padding: 13px 24px;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 14.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .btn-ghost:hover { background: var(--ink); color: var(--paper); }
+
+  /* Scoreboard visual */
+  .scoreboard {
+    background: linear-gradient(165deg, var(--navy-2), var(--navy));
+    border-radius: 6px;
+    padding: 28px 30px 24px;
+    position: relative;
+    box-shadow: 0 20px 60px -20px rgba(15,27,51,0.4);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .sb-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .sb-topbar-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: #7C8AA6;
+    text-transform: uppercase;
+  }
+
+  .sb-topbar-dots { display: flex; gap: 5px; }
+  .sb-topbar-dots span { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.15); }
+  .sb-topbar-dots span:first-child { background: var(--orange-2); }
+
+  .sb-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .sb-row:last-child { border-bottom: none; }
+
+  .sb-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: #7C8AA6;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .sb-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 28px;
+    color: var(--orange-2);
+    letter-spacing: -0.02em;
+  }
+
+  .sb-value.small { font-size: 15px; color: var(--paper); font-family: 'Archivo', sans-serif; font-weight: 700; letter-spacing: 0; }
+
+  /* Divider strip */
+  .strip {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 12px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .strip-inner {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+  }
+
+  .strip-inner span { margin: 0 22px; color: var(--orange-2); }
+
+  /* Narrative scroll sections */
+  .story {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 100px 56px;
+  }
+
+  .story-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 1fr;
+    gap: 40px;
+    padding: 60px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+  }
+
+  .story-row:first-child { padding-top: 0; }
+  .story-row:last-child { border-bottom: none; }
+
+  .story-num {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 46px;
+    color: var(--line);
+  }
+
+  .story-text h3 {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  .story-text p {
+    color: var(--ink-soft);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  .story-visual {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 22px;
+    box-shadow: 0 1px 0 var(--line), 0 12px 30px -18px rgba(15,17,22,0.15);
+  }
+
+  .swatch-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .swatch-bar:last-child { margin-bottom: 0; }
+
+  .bar-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; width: 90px; color: var(--ink-soft); flex-shrink: 0; }
+
+  .bar-track { flex: 1; height: 8px; background: var(--paper-2); border-radius: 4px; position: relative; overflow: hidden; }
+  .bar-fill { height: 100%; background: linear-gradient(90deg, var(--orange), var(--orange-2)); border-radius: 4px; }
+  .bar-fill.navy { background: linear-gradient(90deg, var(--navy), var(--navy-2)); }
+  .bar-fill.green { background: linear-gradient(90deg, var(--green), var(--cyan)); }
+
+  .check-list { display: flex; flex-direction: column; gap: 9px; }
+  .check-item { display: flex; gap: 10px; font-size: 13.5px; align-items: baseline; }
+  .check-item .mark { font-family: 'IBM Plex Mono', monospace; color: var(--orange); font-weight: 700; }
+
+  .fix-item {
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--line);
+    font-size: 13.5px;
+  }
+  .fix-item:last-child { border-bottom: none; }
+  .fix-num { font-family: 'IBM Plex Mono', monospace; color: var(--orange); font-weight: 700; flex-shrink: 0; }
+
+  /* CTA */
+  .cta {
+    background: linear-gradient(180deg, var(--navy-2), var(--navy));
+    color: var(--paper);
+    text-align: center;
+    padding: 100px 56px;
+    position: relative;
+  }
+
+  .cta h2 {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 42px;
+    line-height: 1.12;
+    margin-bottom: 18px;
+  }
+
+  .cta h2 .hl { color: var(--orange-2); }
+
+  .cta p { color: #B9C2D6; font-size: 15.5px; margin-bottom: 32px; }
+
+  .cta .btn-primary { background: var(--orange-2); color: var(--navy); }
+  .cta .btn-primary:hover { background: var(--paper); }
+
+  footer {
+    padding: 30px 56px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    border-top: 3px solid var(--ink);
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 18px 22px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 44px 22px 60px; }
+    .hero h1 { font-size: 36px; }
+    .story { padding: 60px 22px; }
+    .story-row { grid-template-columns: 1fr; gap: 16px; padding: 40px 0; }
+    .story-num { font-size: 30px; }
+    .cta { padding: 64px 22px; }
+    .cta h2 { font-size: 30px; }
+    footer { flex-direction: column; gap: 8px; text-align: center; }
+    .intake-grid { grid-template-columns: 1fr; }
+    .intake-box { padding: 26px 20px; }
+  }
+
+  /* Intake form */
+  .intake-box {
+    max-width: 620px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 34px 38px;
+    text-align: left;
+  }
+
+  .intake-box-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 18px;
+  }
+
+  .intake-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .intake-field { display: flex; flex-direction: column; gap: 6px; }
+  .intake-field.full { grid-column: 1 / -1; }
+
+  .intake-field label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #8B96AC;
+  }
+
+  .intake-field input, .intake-field select {
+    font-family: 'Archivo', sans-serif;
+    font-size: 14px;
+    padding: 10px 12px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.04);
+    color: var(--paper);
+  }
+
+  .intake-field input::placeholder { color: #5C6577; }
+
+  .intake-field input:focus, .intake-field select:focus {
+    outline: none;
+    border-color: var(--orange-2);
+    background: rgba(255,255,255,0.07);
+  }
+
+  .intake-field select option { background: var(--navy); color: var(--paper); }
+
+  .intake-submit {
+    width: 100%;
+    background: var(--orange-2);
+    color: var(--navy);
+    border: none;
+    padding: 14px;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: background 0.15s ease;
+  }
+
+  .intake-submit:hover { background: var(--paper); }
+  .intake-submit:disabled { background: #5C6577; cursor: not-allowed; }
+
+  .intake-note {
+    text-align: center;
+    font-size: 12px;
+    color: #7C8AA6;
+    margin-top: 14px;
+  }
+
+  .intake-success {
+    display: none;
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .intake-success.show { display: block; }
+  .intake-success h3 { font-size: 20px; margin-bottom: 8px; color: var(--paper); }
+  .intake-success p { color: #B9C2D6; font-size: 14px; }
+
+  /* Live audit results */
+  .audit-results {
+    display: none;
+    margin-top: 26px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    text-align: left;
+  }
+
+  .audit-results.show { display: block; animation: results-in 0.3s ease; }
+
+  @keyframes results-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .audit-score-row { display: flex; gap: 10px; margin-bottom: 22px; }
+
+  .audit-score-box {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+
+  .audit-score-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 26px;
+    color: var(--orange-2);
+  }
+
+  .audit-score-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #8B96AC;
+    margin-top: 4px;
+  }
+
+  .audit-section { margin-bottom: 18px; }
+
+  .audit-section h4 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 9px;
+  }
+
+  .audit-section ul { padding-left: 18px; margin: 0; }
+  .audit-section li { font-size: 13.5px; color: #D5DAE5; line-height: 1.6; margin-bottom: 5px; }
+  .audit-section p { font-size: 13.5px; color: #D5DAE5; line-height: 1.6; margin: 0; }
+
+  .audit-action {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px dashed rgba(255,255,255,0.1);
+    font-size: 13.5px;
+    color: #D5DAE5;
+  }
+
+  .audit-action:last-child { border-bottom: none; }
+  .audit-action .n { font-family: 'IBM Plex Mono', monospace; color: var(--orange-2); font-weight: 700; flex-shrink: 0; }
+
+  .audit-error {
+    display: none;
+    background: rgba(217,84,31,0.12);
+    border: 1px solid rgba(217,84,31,0.4);
+    color: #F2A15C;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-top: 14px;
+  }
+
+  .audit-error.show { display: block; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand"><span class="status-dot"></span>BENCH<span>MARK</span></div>
+  <div class="nav-links">
+    <a href="#how">How It Works</a>
+    <a href="#sample">Sample Readout</a>
+  </div>
+  <a href="#cta" class="nav-cta">Get Scored</a>
+</nav>
+
+<div class="hero">
+  <div>
+    <div class="hero-tag">// NIL SOCIAL AUDIT</div>
+    <h1>Everyone says<br>you're a brand.<br><span class="underline">Prove it.</span></h1>
+    <p class="hero-body">A straight numbers read on your social presence: how you stack up, where sponsors would hesitate, and what to fix before you pitch anyone.</p>
+    <div class="hero-ctas">
+      <a href="#cta" class="btn-primary">Get Your Score →</a>
+      <a href="#sample" class="btn-ghost">See a Readout</a>
+    </div>
+  </div>
+
+  <div class="scoreboard">
+    <div class="sb-topbar">
+      <span class="sb-topbar-label">// audit_readout.log</span>
+      <div class="sb-topbar-dots"><span></span><span></span><span></span></div>
+    </div>
+    <div class="sb-row">
+      <span class="sb-label">Engagement Rate</span>
+      <span class="sb-value">74</span>
+    </div>
+    <div class="sb-row">
+      <span class="sb-label">Sponsor Ready</span>
+      <span class="sb-value">61</span>
+    </div>
+    <div class="sb-row">
+      <span class="sb-label">Growth Trend</span>
+      <span class="sb-value">88</span>
+    </div>
+    <div class="sb-row">
+      <span class="sb-label">Top Fix</span>
+      <span class="sb-value small">ADD LINK IN BIO</span>
+    </div>
+  </div>
+</div>
+
+<div class="strip">
+  <div class="strip-inner">
+    ENGAGEMENT <span>&bull;</span> BRAND READINESS <span>&bull;</span> BENCHMARK <span>&bull;</span> ACTION PLAN <span>&bull;</span> ENGAGEMENT <span>&bull;</span> BRAND READINESS <span>&bull;</span> BENCHMARK <span>&bull;</span> ACTION PLAN <span>&bull;</span> ENGAGEMENT <span>&bull;</span> BRAND READINESS <span>&bull;</span> BENCHMARK <span>&bull;</span> ACTION PLAN
+  </div>
+</div>
+
+<div class="story" id="how">
+  <div class="story-row">
+    <div class="story-num">01</div>
+    <div class="story-text">
+      <h3>Send your numbers</h3>
+      <p>Followers, average engagement, posting frequency across whatever platforms you're actually active on. Takes two minutes, no login or account access needed.</p>
+    </div>
+    <div class="story-visual">
+      <div class="swatch-bar"><span class="bar-label">INSTAGRAM</span><div class="bar-track"><div class="bar-fill" style="width:70%"></div></div></div>
+      <div class="swatch-bar"><span class="bar-label">TIKTOK</span><div class="bar-track"><div class="bar-fill navy" style="width:88%"></div></div></div>
+      <div class="swatch-bar"><span class="bar-label">TWITTER/X</span><div class="bar-track"><div class="bar-fill green" style="width:35%"></div></div></div>
+    </div>
+  </div>
+
+  <div class="story-row">
+    <div class="story-num">02</div>
+    <div class="story-text">
+      <h3>Get scored like a sponsor would see you</h3>
+      <p>Engagement relative to your following, whether your bio and grid actually look sponsor-ready, and where your growth is trending. No fluff, just where you stand right now.</p>
+    </div>
+    <div class="story-visual" id="sample">
+      <div class="check-list">
+        <div class="check-item"><span class="mark">+</span> Highlight reels are your strongest content type</div>
+        <div class="check-item"><span class="mark">+</span> TikTok engagement well above your follower count</div>
+        <div class="check-item"><span class="mark">&minus;</span> No link in bio across any platform</div>
+        <div class="check-item"><span class="mark">&minus;</span> Posting gaps of 10+ days on Instagram</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="story-row">
+    <div class="story-num">03</div>
+    <div class="story-text">
+      <h3>Know exactly what to fix</h3>
+      <p>A short, ranked list of specific changes, not "post more." Real, doable fixes ordered by what actually moves the needle first.</p>
+    </div>
+    <div class="story-visual">
+      <div class="fix-item"><span class="fix-num">1</span> Add a working link in bio on every platform</div>
+      <div class="fix-item"><span class="fix-num">2</span> Shift posting cadence to 3x/week minimum</div>
+      <div class="fix-item"><span class="fix-num">3</span> Lean into highlight-style content on IG, not just TikTok</div>
+    </div>
+  </div>
+</div>
+
+<div class="cta" id="cta">
+  <h2>Find out where you<br><span class="hl">actually</span> stand.</h2>
+  <p>Enter your numbers. Get a real readout back in seconds, right here.</p>
+
+  <div class="intake-box">
+    <div class="intake-box-label">// submit your numbers</div>
+
+    <form id="audit-form">
+      <div class="intake-grid">
+        <div class="intake-field">
+          <label>Name</label>
+          <input type="text" id="af-name" placeholder="Your name" required />
+        </div>
+        <div class="intake-field">
+          <label>Sport</label>
+          <input type="text" id="af-sport" placeholder="e.g. Track & Field" required />
+        </div>
+        <div class="intake-field">
+          <label>Followers</label>
+          <input type="number" id="af-followers" placeholder="e.g. 12000" />
+        </div>
+        <div class="intake-field">
+          <label>Avg. Views/Post</label>
+          <input type="number" id="af-views" placeholder="e.g. 8000" />
+        </div>
+        <div class="intake-field">
+          <label>Engagement Rate (%)</label>
+          <input type="number" step="0.1" id="af-engagement" placeholder="e.g. 4.2" />
+        </div>
+        <div class="intake-field">
+          <label>Main Platform</label>
+          <select id="af-platform">
+            <option value="">Select one</option>
+            <option value="Instagram">Instagram</option>
+            <option value="TikTok">TikTok</option>
+            <option value="Twitter/X">Twitter / X</option>
+            <option value="Multiple">About equal across platforms</option>
+          </select>
+        </div>
+        <div class="intake-field full">
+          <label>Content Niche</label>
+          <input type="text" id="af-niche" placeholder="e.g. training clips, game day, lifestyle" />
+        </div>
+      </div>
+
+      <button type="submit" class="intake-submit" id="audit-submit-btn">Run Audit →</button>
+      <div class="intake-note">Free · results appear below in a few seconds</div>
+    </form>
+
+    <div class="audit-error" id="audit-error"></div>
+
+    <div class="audit-results" id="audit-results"></div>
+  </div>
+</div>
+
+<footer>
+  <div>BENCHMARK NIL Social Audits</div>
+</footer>
+
+<script>
+  const form = document.getElementById('audit-form');
+  const submitBtn = document.getElementById('audit-submit-btn');
+  const resultsBox = document.getElementById('audit-results');
+  const errorBox = document.getElementById('audit-error');
+
+  function val(id) { return document.getElementById(id).value.trim(); }
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const payload = {
+      name: val('af-name') || 'This athlete',
+      sport: val('af-sport') || 'their sport',
+      followers: val('af-followers') || 'not provided',
+      avgViews: val('af-views') || 'not provided',
+      engagementPct: val('af-engagement') || 'not provided',
+      mainPlatform: val('af-platform') || 'not provided',
+      niche: val('af-niche') || 'not provided',
+    };
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Running audit...';
+    errorBox.classList.remove('show');
+    resultsBox.classList.remove('show');
+
+    try {
+      const res = await fetch('/.netlify/functions/audit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error('Request failed');
+
+      const audit = await res.json();
+      renderResults(payload.name, payload.sport, audit);
+    } catch (err) {
+      errorBox.textContent = "Couldn't run the audit. Try again in a moment.";
+      errorBox.classList.add('show');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Run Audit →';
+    }
+  });
+
+  function renderResults(name, sport, audit) {
+    const working = audit.whatsWorking.map((x) => `<li>${escapeHtml(x)}</li>`).join('');
+    const notWorking = audit.whatsNot.map((x) => `<li>${escapeHtml(x)}</li>`).join('');
+    const actions = audit.actionItems
+      .map((x, i) => `<div class="audit-action"><span class="n">${i + 1}</span><span>${escapeHtml(x)}</span></div>`)
+      .join('');
+
+    resultsBox.innerHTML = `
+      <div class="audit-score-row">
+        <div class="audit-score-box"><div class="audit-score-num">${audit.engagementScore}</div><div class="audit-score-label">Engagement</div></div>
+        <div class="audit-score-box"><div class="audit-score-num">${audit.brandReadyScore}</div><div class="audit-score-label">Brand Ready</div></div>
+        <div class="audit-score-box"><div class="audit-score-num">${audit.growthPotential}</div><div class="audit-score-label">Growth</div></div>
+      </div>
+      <div class="audit-section">
+        <h4>What's Working</h4>
+        <ul>${working}</ul>
+      </div>
+      <div class="audit-section">
+        <h4>What's Not</h4>
+        <ul>${notWorking}</ul>
+      </div>
+      <div class="audit-section">
+        <h4>Brand Readiness</h4>
+        <p>${escapeHtml(audit.brandReadiness)}</p>
+      </div>
+      <div class="audit-section">
+        <h4>Action Items</h4>
+        ${actions}
+      </div>
+    `;
+    resultsBox.classList.add('show');
+    resultsBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+</script>
+
+</body>
+</html>
