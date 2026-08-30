@@ -676,10 +676,57 @@
           <label>Avg. Views/Post</label>
           <input type="number" id="af-views" placeholder="e.g. 8000" />
         </div>
-        <div class="intake-field">
-          <label>Engagement Rate (%)</label>
-          <input type="number" step="0.1" id="af-engagement" placeholder="e.g. 4.2" />
-        </div>
+       <div class="intake-field">
+  <label>Engagement Rate (%) <span class="calc-trigger" onclick="openEngCalc()">Not sure? Calculate it</span></label>
+  <input type="number" step="0.1" id="af-engagement" placeholder="e.g. 4.2" />
+</div>
+
+<div class="calc-overlay" id="eng-calc-overlay">
+  <div class="calc-modal">
+    <div class="calc-modal-header">
+      <span>// ENGAGEMENT CALCULATOR</span>
+      <span class="calc-close" onclick="closeEngCalc()">&times;</span>
+    </div>
+    <p class="calc-modal-sub">Pull likes and comments from your last 3 posts.</p>
+
+    <div class="calc-row">
+      <div class="calc-field">
+        <label>Post 1 Likes</label>
+        <input type="number" id="calc-likes-1" placeholder="e.g. 340" />
+      </div>
+      <div class="calc-field">
+        <label>Post 1 Comments</label>
+        <input type="number" id="calc-comments-1" placeholder="e.g. 12" />
+      </div>
+    </div>
+
+    <div class="calc-row">
+      <div class="calc-field">
+        <label>Post 2 Likes</label>
+        <input type="number" id="calc-likes-2" placeholder="e.g. 290" />
+      </div>
+      <div class="calc-field">
+        <label>Post 2 Comments</label>
+        <input type="number" id="calc-comments-2" placeholder="e.g. 8" />
+      </div>
+    </div>
+
+    <div class="calc-row">
+      <div class="calc-field">
+        <label>Post 3 Likes</label>
+        <input type="number" id="calc-likes-3" placeholder="e.g. 410" />
+      </div>
+      <div class="calc-field">
+        <label>Post 3 Comments</label>
+        <input type="number" id="calc-comments-3" placeholder="e.g. 15" />
+      </div>
+    </div>
+
+    <div class="calc-error" id="calc-error"></div>
+
+    <button type="button" class="calc-submit" onclick="runEngCalc()">Calculate</button>
+  </div>
+</div>
         <div class="intake-field">
           <label>Main Platform</label>
           <select id="af-platform">
