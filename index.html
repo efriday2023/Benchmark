@@ -946,6 +946,49 @@
     resultsBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 </script>
+  <script>
+function openEngCalc() {
+  document.getElementById('eng-calc-overlay').classList.add('active');
+}
+
+function closeEngCalc() {
+  document.getElementById('eng-calc-overlay').classList.remove('active');
+}
+
+function runEngCalc() {
+  const followers = parseFloat(document.getElementById('af-followers').value);
+  const errorEl = document.getElementById('calc-error');
+  errorEl.textContent = '';
+
+  if (!followers || followers <= 0) {
+    errorEl.textContent = 'Enter your follower count in the main form first.';
+    return;
+  }
+
+  let total = 0;
+  let filledPosts = 0;
+
+  for (let i = 1; i <= 3; i++) {
+    const likes = parseFloat(document.getElementById('calc-likes-' + i).value) || 0;
+    const comments = parseFloat(document.getElementById('calc-comments-' + i).value) || 0;
+    if (likes > 0 || comments > 0) {
+      total += likes + comments;
+      filledPosts++;
+    }
+  }
+
+  if (filledPosts === 0) {
+    errorEl.textContent = 'Enter at least one post to calculate.';
+    return;
+  }
+
+  const avgPerPost = total / filledPosts;
+  const engagementRate = (avgPerPost / followers) * 100;
+
+  document.getElementById('af-engagement').value = engagementRate.toFixed(1);
+  closeEngCalc();
+}
+</script>
 
 </body>
 </html>
