@@ -44,7 +44,7 @@ Respond with ONLY valid JSON (no markdown, no code fences, no preamble) matching
   "actionItems": ["specific action", "specific action", "specific action", "specific action"]
 }
 
-Keep bullets under 20 words each. Be specific and direct, not generic.`;
+Keep bullets under 20 words each. Be specific and direct, not generic. Do not use em dashes or en dashes anywhere in your response, write around them instead.`;
 
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
