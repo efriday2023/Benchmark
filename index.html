@@ -631,7 +631,28 @@ box-shadow: 0 1px 0 rgba(14,17,22,0.08), 0 8px 24px -12px rgba(14,17,22,0.12);
 
   .intake-submit:hover { background: var(--paper); }
   .intake-submit:disabled { background: #5C6577; cursor: not-allowed; }
-
+.audit-spinner {
+display: none;
+width: 20px;
+height: 20px;
+margin-right: 8px;
+vertical-align: middle;
+animation: spinner-rotate 0.9s linear infinite;
+}
+.audit-spinner.show {
+display: inline-block;
+}
+.audit-spinner circle {
+fill: none;
+stroke: var(--paper);
+stroke-width: 8;
+stroke-linecap: round;
+stroke-dasharray: 90;
+stroke-dashoffset: 60;
+}
+@keyframes spinner-rotate {
+100% { transform: rotate(360deg); }
+}
   .intake-note {
     text-align: center;
     font-size: 12px;
