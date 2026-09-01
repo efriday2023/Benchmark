@@ -44,7 +44,13 @@ Respond with ONLY valid JSON (no markdown, no code fences, no preamble) matching
   "actionItems": ["specific action", "specific action", "specific action", "specific action"]
 }
 
-Keep bullets under 20 words each. Be specific and direct, not generic. Do not use em dashes or en dashes anywhere in your response, write around them instead.`;
+Keep bullets under 20 words each. Be specific and direct, not generic. Do not use em dashes or en dashes anywhere in your response, write around them instead.
+
+Every action item must reference a specific number, detail, or fact from this athlete's actual input, their follower count, engagement rate, sport, niche, or platform, not a generic best practice that could apply to any athlete.
+
+Do not default to these overused suggestions unless this athlete's specific numbers make it the clear top priority: build a media kit, add a link in bio, post more consistently, reach out to brands. If you do use one of these, tie it directly to a specific number or gap unique to this athlete.
+
+Two athletes with different follower counts, sports, or niches should never receive nearly identical action items. Vary your language and reasoning based on what is actually different about each athlete's numbers.`;
 
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
