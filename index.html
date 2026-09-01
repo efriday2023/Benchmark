@@ -652,6 +652,66 @@ stroke-dashoffset: 60;
 }
 @keyframes spinner-rotate {
 100% { transform: rotate(360deg); }
+}.audit-overlay {
+display: none;
+position: fixed;
+top: 0; left: 0; right: 0; bottom: 0;
+background: rgba(15,27,51,0.97);
+z-index: 1000;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+text-align: center;
+}
+.audit-overlay.show { display: flex; }
+.audit-overlay-ring-wrap {
+width: 80px;
+height: 80px;
+margin-bottom: 28px;
+}
+.audit-overlay-ring {
+width: 80px;
+height: 80px;
+animation: overlay-spin 1.1s linear infinite;
+}
+.audit-overlay-ring-track {
+fill: none;
+stroke: rgba(255,255,255,0.1);
+stroke-width: 6;
+}
+.audit-overlay-ring-fill {
+fill: none;
+stroke: var(--orange-2);
+stroke-width: 6;
+stroke-linecap: round;
+stroke-dasharray: 160;
+stroke-dashoffset: 120;
+}
+@keyframes overlay-spin {
+100% { transform: rotate(360deg); }
+}
+.audit-overlay-title {
+font-family: 'Archivo Black', sans-serif;
+font-size: 26px;
+color: var(--paper);
+}
+.audit-overlay-dots span {
+opacity: 0.2;
+animation: overlay-dot-pulse 1.4s ease-in-out infinite;
+}
+.audit-overlay-dots span:nth-child(2) { animation-delay: 0.2s; }
+.audit-overlay-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes overlay-dot-pulse {
+0%, 100% { opacity: 0.2; }
+50% { opacity: 1; }
+}
+.audit-overlay-sub {
+font-family: 'IBM Plex Mono', monospace;
+font-size: 12px;
+letter-spacing: 0.06em;
+text-transform: uppercase;
+color: #8B96AC;
+margin-top: 10px;
 }
   .intake-note {
     text-align: center;
