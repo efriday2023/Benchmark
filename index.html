@@ -1099,6 +1099,18 @@ animateCount(document.getElementById('sb-growth'), 88, 2200);
 }, { threshold: 0.4 });
 
 if (scoreboardEl) observer.observe(scoreboardEl);
+</script><script>
+function toggleNavMenu() {
+  document.getElementById('nav-dropdown-content').classList.toggle('open');
+}
+
+document.addEventListener('click', function(e) {
+  const dropdown = document.querySelector('.nav-dropdown');
+  const content = document.getElementById('nav-dropdown-content');
+  if (dropdown && !dropdown.contains(e.target)) {
+    content.classList.remove('open');
+  }
+});
 </script>
 
 </body>
