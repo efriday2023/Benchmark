@@ -682,9 +682,14 @@ box-shadow: 0 1px 0 rgba(14,17,22,0.08), 0 8px 24px -12px rgba(14,17,22,0.12);
 <nav>
   <div class="brand"><span class="status-dot"></span><span class="brand-text">BENCH<span>MARK</span></span></div>
   <div class="nav-links">
-    <a href="#how">How It Works</a>
-    <a href="#sample">Sample Readout</a>
+  <div class="nav-dropdown">
+    <button class="nav-dropdown-btn" onclick="toggleNavMenu()">Menu <span class="nav-caret">▾</span></button>
+    <div class="nav-dropdown-content" id="nav-dropdown-content">
+      <a href="#how">How It Works</a>
+      <a href="#sample">Sample Readout</a>
+    </div>
   </div>
+</div>
   <a href="#cta" class="nav-cta">Get Scored</a>
 </nav>
 
