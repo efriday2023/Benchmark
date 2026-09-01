@@ -1061,7 +1061,8 @@ document.getElementById('audit-submit-text').textContent = 'Running audit...';
       errorBox.classList.add('show');
     } finally {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Run Audit →';
+document.getElementById('audit-spinner').classList.remove('show');
+document.getElementById('audit-submit-text').textContent = 'Run Audit →';
     }
   });
 function scoreRing(value, label) {
