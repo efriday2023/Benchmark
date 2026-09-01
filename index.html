@@ -992,6 +992,38 @@ function runEngCalc() {
   closeEngCalc();
 }
 </script>
+  <script>
+function animateCount(el, target, duration) {
+  let startTime = null;
+  function step(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const progress = Math.min((timestamp - startTime) / duration, 1);
+    el.textContent = Math.floor(progress * target);
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else {
+      el.textContent = target;
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+const scoreboardEl = document.querySelector('.scoreboard');
+let scoreboardAnimated = false;
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !scoreboardAnimated) {
+      scoreboardAnimated = true;
+      animateCount(document.getElementById('sb-engagement'), 74, 1200);
+      animateCount(document.getElementById('sb-sponsor'), 61, 1200);
+      animateCount(document.getElementById('sb-growth'), 88, 1200);
+    }
+  });
+}, { threshold: 0.4 });
+
+if (scoreboardEl) observer.observe(scoreboardEl);
+</script>
 
 </body>
 </html>
