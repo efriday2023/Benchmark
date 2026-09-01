@@ -1040,7 +1040,8 @@ color: var(--orange-2);
     };
 
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Running audit...';
+document.getElementById('audit-spinner').classList.add('show');
+document.getElementById('audit-submit-text').textContent = 'Running audit...';
     errorBox.classList.remove('show');
     resultsBox.classList.remove('show');
 
