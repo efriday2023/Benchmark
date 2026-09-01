@@ -1002,7 +1002,16 @@ color: var(--orange-2);
 </button>
       <div class="intake-note">Free · results appear below in a few seconds</div>
     </form>
-
+<div class="audit-overlay" id="audit-overlay">
+<div class="audit-overlay-ring-wrap">
+<svg class="audit-overlay-ring" viewBox="0 0 80 80">
+<circle class="audit-overlay-ring-track" cx="40" cy="40" r="34"></circle>
+<circle class="audit-overlay-ring-fill" cx="40" cy="40" r="34"></circle>
+</svg>
+</div>
+<div class="audit-overlay-title">Running your audit<span class="audit-overlay-dots"><span>.</span><span>.</span><span>.</span></span></div>
+<div class="audit-overlay-sub mono" id="audit-overlay-sub">Scanning your content</div>
+</div>
     <div class="audit-error" id="audit-error"></div>
 
     <div class="audit-results" id="audit-results"></div>
