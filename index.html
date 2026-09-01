@@ -1037,7 +1037,22 @@ color: var(--orange-2);
       submitBtn.textContent = 'Run Audit →';
     }
   });
-
+function scoreRing(value, label) {
+  const v = Math.max(0, Math.min(100, Number(value) || 0));
+  const r = 34;
+  const c = 2 * Math.PI * r;
+  const offset = c * (1 - v / 100);
+  return `<div class="audit-score-box">
+    <div class="score-ring-wrap">
+      <svg class="score-ring" viewBox="0 0 80 80">
+        <circle class="score-ring-track" cx="40" cy="40" r="${r}"></circle>
+        <circle class="score-ring-fill" cx="40" cy="40" r="${r}" stroke-dasharray="${c}" stroke-dashoffset="${offset}"></circle>
+      </svg>
+      <div class="score-ring-num">${v}</div>
+    </div>
+    <div class="audit-score-label">${label}</div>
+  </div>`;
+}
   function renderResults(name, sport, audit) {
     const working = audit.whatsWorking.map((x) => `<li>${escapeHtml(x)}</li>`).join('');
     const notWorking = audit.whatsNot.map((x) => `<li>${escapeHtml(x)}</li>`).join('');
