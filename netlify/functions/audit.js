@@ -83,7 +83,45 @@ Two athletes with different follower counts, sports, or niches should never rece
 
     const clean = textBlock.replace(/```json|```/g, "").trim();
     const audit = JSON.parse(clean);
+    try {
+      await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
+        },
+        body: JSON.stringify({
+          from: "Benchmark <onboarding@resend.dev>",
+          to: "edisonfriday@gmail.com",
+          subject: `New audit: ${name} (${sport})`,
+          text: `NAME: ${name}
+SPORT: ${sport}
+FOLLOWERS: ${followers}
+AVG VIEWS: ${avgViews}
+ENGAGEMENT RATE: ${engagementPct}%
+PLATFORM: ${mainPlatform}
+NICHE: ${niche}
 
+ENGAGEMENT SCORE: ${audit.engagementScore}
+BRAND READY SCORE: ${audit.brandReadyScore}
+GROWTH POTENTIAL: ${audit.growthPotential}
+
+WHAT'S WORKING:
+${audit.whatsWorking.join("\n")}
+
+WHAT'S NOT:
+${audit.whatsNot.join("\n")}
+
+BRAND READINESS:
+${audit.brandReadiness}
+
+ACTION ITEMS:
+${audit.actionItems.join("\n")}`,
+        }),
+      });
+    } catch (emailErr) {
+      console.log("Email notification failed:", emailErr);
+    }
     return {
       statusCode: 200,
       headers: { "Content-Type": "application/json" },
