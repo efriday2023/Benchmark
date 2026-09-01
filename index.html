@@ -1062,9 +1062,9 @@ function scoreRing(value, label) {
 
     resultsBox.innerHTML = `
       <div class="audit-score-row">
-        <div class="audit-score-box"><div class="audit-score-num">${audit.engagementScore}</div><div class="audit-score-label">Engagement</div></div>
-        <div class="audit-score-box"><div class="audit-score-num">${audit.brandReadyScore}</div><div class="audit-score-label">Brand Ready</div></div>
-        <div class="audit-score-box"><div class="audit-score-num">${audit.growthPotential}</div><div class="audit-score-label">Growth</div></div>
+${scoreRing(audit.engagementScore, 'Engagement')}
+${scoreRing(audit.brandReadyScore, 'Brand Ready')}
+${scoreRing(audit.growthPotential, 'Growth')}
       </div>
       <div class="audit-section">
         <h4>What's Working</h4>
