@@ -1003,7 +1003,7 @@ function animateCount(el, target, duration) {
       requestAnimationFrame(step);
     } else {
       el.textContent = target;
-    }
+        }
   }
   requestAnimationFrame(step);
 }
@@ -1015,9 +1015,9 @@ const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting && !scoreboardAnimated) {
       scoreboardAnimated = true;
-      animateCount(document.getElementById('sb-engagement'), 74, 1200);
-      animateCount(document.getElementById('sb-sponsor'), 61, 1200);
-      animateCount(document.getElementById('sb-growth'), 88, 1200);
+      animateCount(document.getElementById('sb-engagement'), 74, 2200);
+animateCount(document.getElementById('sb-sponsor'), 61, 2200);
+animateCount(document.getElementById('sb-growth'), 88, 2200);
     }
   });
 }, { threshold: 0.4 });
